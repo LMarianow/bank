@@ -54,3 +54,9 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem "rspec-rails", "~> 5.1", :groups => [:development, :test]
+
+gem "shoulda-matchers", "~> 5.3", :group => :test
+
+gem "factory_bot_rails", "~> 6.2", :groups => [:development, :test]
+
+gem "faker", "~> 3.1", :groups => [:development, :test]
