@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[ show edit update destroy ]
+  before_action :set_user, only: %i[ show edit update destroy deposit withdraw transference balance]
 
   # GET /users or /users.json
   def index
@@ -19,9 +19,20 @@ class UsersController < ApplicationController
   def edit
   end
 
+  def login
+    @user = User.find_by_email(params[:email])
+    if @user.password_digest == params[:password]
+      give_token
+    else
+      redirect_to home_url
+    end
+  end
+
   # POST /users or /users.json
   def create
     @user = User.new(user_params)
+    @user.password = params[:password]
+    byebug
 
     respond_to do |format|
       if @user.save
@@ -57,6 +68,22 @@ class UsersController < ApplicationController
     end
   end
 
+  def deposit
+    @user.account.deposit(params[:quantity])
+  end
+
+  def withdraw
+    @user.account.withdraw(params[:quantity])
+  end
+
+  def transference
+    @user.account.transference(params[:quantity], params[:email])
+  end
+
+  def balance
+    @user.account.balance
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
@@ -65,6 +92,6 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:name, :email, :password_digest, :cpf)
+      params.require(:user).permit(:name, :email, :password, :cpf)
     end
 end
