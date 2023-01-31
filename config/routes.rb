@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       get 'withdraw'
       post 'transference'
       get 'balance'
+      get 'extract'
     end
   end
   resources :accounts

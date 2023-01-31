@@ -250,4 +250,27 @@ RSpec.describe "/users", type: :request do
       expect(response).to have_http_status(:no_content)
     end
   end
+
+  describe "get /extract" do
+    let!(:user) { create(:user) }
+    let!(:account) { user.account }
+    let!(:events) { FactoryBot.create_list(:event, 5, account: account) }
+
+    let(:params) do
+      {
+        date_from: DateTime.new(2023,1,28),
+        date_to: DateTime.new(2023,2,2)
+      }
+    end
+
+    before do
+      events.last.update(created_at: DateTime.new(2023,1,25))
+
+      get extract_user_path(user), params: params, as: :json
+    end
+
+    it "renders a successful response", :aggregate_failures do
+      expect(response).to have_http_status(:no_content)
+    end
+  end
 end
