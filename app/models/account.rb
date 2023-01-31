@@ -12,27 +12,28 @@ class Account < ApplicationRecord
   end
 
   def withdraw(quantity)
-    return if verify_balance(quantity)
+    return if verify_balance(quantity, 'withdraw')
 
     update(balance: balance - quantity.to_f)
     create_event('withdraw', "withdraw in the value: #{quantity}")
   end
 
   def transference(quantity, email)
-    return if verify_balance(quantity)
+    return if verify_balance(quantity, 'transference')
 
     user_dest = User.find_by!(email: email)
-    account_dest = user_dest.account
+    account_dest = Account.find_by(user: user_dest)
 
     update(balance: balance - quantity)
+    byebug
     account_dest.update(balance: account_dest.balance + quantity)
     create_event('transference', "transference in the value: #{quantity} to #{user_dest.email}")
   end
 
   private
 
-  def verify_balance(quantity)
-    raise ArgumentError, 'balance insuficient for the withdraw' if balance - quantity < 0
+  def verify_balance(quantity, action)
+    raise ArgumentError, "balance insuficient for the #{action}" if balance - quantity < 0
   end
 
   def create_event(action, description)

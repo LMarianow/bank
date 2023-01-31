@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :account do
-    balance { 0.5 }
-    association :user, factory: :user
+    balance { 0 }
+    user { create(:user) }
   end
 end
