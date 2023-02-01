@@ -19,18 +19,33 @@ class Account < ApplicationRecord
   end
 
   def transference(quantity, email)
-    return if verify_balance(quantity, 'transference')
+    quantity_with_tax = tax_por_hour(quantity)
+
+    return if verify_balance(quantity_with_tax, 'transference')
+
 
     user_dest = User.find_by!(email: email)
-    account_dest = Account.find_by(user: user_dest)
+    account_dest = user_dest.account
 
-    update(balance: balance - quantity)
+    update(balance: balance - quantity_with_tax)
     byebug
     account_dest.update(balance: account_dest.balance + quantity)
     create_event('transference', "transference in the value: #{quantity} to #{user_dest.email}")
   end
 
   private
+
+  def tax_por_hour(quantity)
+    hour_now = DateTime.now
+
+    tax = 0.0
+
+    tax += 10 if quantity > 1000
+
+    return quantity + (tax + 5) if hour_now.utc.strftime( "%H%M%S%N" ) >= "090000" && hour_now.utc.strftime( "%H%M%S%N" ) <= "180000"
+
+    quantity + (tax + 7)
+  end
 
   def verify_balance(quantity, action)
     raise ArgumentError, "balance insuficient for the #{action}" if balance - quantity < 0
