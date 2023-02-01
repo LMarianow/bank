@@ -47,26 +47,29 @@ RSpec.describe Account do
     end
   end
 
-  describe '#transference' do
-    context 'account have balance suficient' do
+  context '#transference' do
       let!(:account2) { create(:account, balance: 200) }
       let!(:account3) { create(:account, balance: 500) }
 
-      before { 
-        account3.reload
-        account2.transference(100, account3.user.email) }
-
-      it 'must be transference the value', :aggregate_failures do
-        expect(account2.reload.balance).to eq(100)
-        byebug
-        expect(Account.last.reload.balance).to eq(500)
-      end
+      context 'account have balance suficient' do
+            before do
+                Timecop.freeze(DateTime.new(2023, 7, 15, 0)) do
+                    account2.transference(100, account3.user.email)
+                end
+            end
+            after do
+                Timecop.return
+            end
+            it 'must be transference the value', :aggregate_failures do
+                expect(account2.reload.balance).to eq(93)
+                expect(account3.balance).to eq(500)
+            end
+        end
     end
 
     context 'account dont have balance suficient' do
-      it 'dont must be transference the value' do
-        expect{account2.transference(5000, account3.user.email)}.to raise_error(ArgumentError)
-      end
+        it 'dont must be transference the value' do
+          expect{account2.transference(5000, account3.user.email)}.to raise_error(ArgumentError)
+        end
     end
-  end
 end

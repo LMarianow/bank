@@ -144,7 +144,8 @@ RSpec.describe "/users", type: :request do
   
 
   describe "post /deposit" do
-    let!(:user) { create(:user) }
+    let!(:account) { create(:account) }
+    let!(:user) { account.user }
 
     let(:params) do
       {
@@ -153,15 +154,15 @@ RSpec.describe "/users", type: :request do
     end
 
     it "renders a successful response" do
-      post deposit_user_path(user), params: params
+      post deposit_user_path(user), params: params, as: :json
 
       expect(response).to have_http_status(:no_content)
     end
   end
 
   describe "get /withdraw" do
-    let!(:user) { create(:user) }
-    let!(:account) { user.account }
+    let!(:account) { create(:account) }
+    let!(:user) { account.user }
 
     let(:params) do
       {
@@ -194,10 +195,10 @@ RSpec.describe "/users", type: :request do
   end
 
   describe "post /transference" do
-    let!(:user) { create(:user) }
-    let!(:account) { user.account }
-    let!(:user2) { create(:user) }
-    let!(:account2) { user2.account }
+    let!(:account) { create(:account) }
+    let!(:user) { account.user }
+    let!(:account2) { create(:account) }
+    let!(:user2) { account2.user }
 
     let(:params) do
       {
@@ -231,8 +232,8 @@ RSpec.describe "/users", type: :request do
   end
 
   describe "get /balance" do
-    let!(:user) { create(:user) }
-    let!(:account) { user.account }
+    let!(:account) { create(:account) }
+    let!(:user) { account.user }
 
     let(:params) do
       {
@@ -252,8 +253,8 @@ RSpec.describe "/users", type: :request do
   end
 
   describe "get /extract" do
-    let!(:user) { create(:user) }
-    let!(:account) { user.account }
+    let!(:account) { create(:account) }
+    let!(:user) { account.user }
     let!(:events) { FactoryBot.create_list(:event, 5, account: account) }
 
     let(:params) do
