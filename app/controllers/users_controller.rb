@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[ show edit update destroy deposit withdraw transference balance]
+  before_action :set_user, only: %i[ show edit update destroy deposit withdraw transference balance extract]
 
   # GET /users or /users.json
   def index
@@ -81,7 +81,12 @@ class UsersController < ApplicationController
       format.json { head :no_content }
     end
   end
-
+  def extract
+    @extract = @user.account
+                .events
+                .where(created_at: params[:date_from]..params[:date_to])
+                .order(id: :desc)
+  end
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
