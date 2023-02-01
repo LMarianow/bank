@@ -1,33 +1,79 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Users</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Password digest</th>
-      <th>Cpf</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @users.each do |user| %>
-      <tr>
-        <td><%= user.name %></td>
-        <td><%= user.email %></td>
-        <td><%= user.password_digest %></td>
-        <td><%= user.cpf %></td>
-        <td><%= link_to 'Show', user %></td>
-        <td><%= link_to 'Edit', edit_user_path(user) %></td>
-        <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New User', new_user_path %>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@600&family=Poppins:wght@400;500;600&family=Roboto:wght@400;500&family=Shizuru&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <title>NobeSistemas</title>
+</head>
+<body>
+    <section class="background-main">
+        <header>
+            <nav>
+                <%= image_tag("logomarca.png", :alt => "Logo NobeSistemas") %>
+            </nav>
+        </header>
+            <section class="background_form">
+                    <form action="">
+                        <div class="form_title">
+                            <%= image_tag("log-in.svg", :alt => "Icon Login", class: "icon") %>
+                            <h1>Faça seu login</h1>
+                            <p>Entre com suas informações de cadastro.</p>
+                        </div>
+                        <div class="area_input">
+                            <label for="email" class="label_title">E-mail
+                                <div class="box_input">
+                                    <%= image_tag("mail.svg", :alt => "Icon Login", class: "icon") %>
+                                    <%= image_tag("mail-focus.svg", :alt => "Icon Login Select", class: "icon icon_focus") %>
+                                    <input type="email" id="email" placeholder="Digite seu e-mail">
+                                </div>
+                            </label>
+                        </div>
+                        <div class="area_input">
+                            <label class="label_title" for="password">Senha
+                                <div class="box_input">
+                                    <%= image_tag("lock.svg", :alt => "Icon Login", class: "icon") %>
+                                    <%= image_tag("lock-focus.svg", :alt => "Icon Login Select", class: "icon icon_focus") %>
+                                    <input type="password" id="password" placeholder="Digite sua senha">
+                                    <%= image_tag("eye.svg", :alt => "Display Password Icon", class: "icon icon_focus icon_eye") %>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="area_input area_input_remember">
+                            <label for="remember">
+                                <div class="remember_style">
+                                    <input type="checkbox" id="remember">
+                                    <div class="input_checkbox">
+                                        <i class="material-icons">done</i>
+                                    </div>
+                                </div>
+                                <label for="remember">Lembre-me</label>
+                            </label>
+                            <a href="#">Esqueci minha senha</a>
+                        </div>
+                        <div class="area_input area_input_submit">
+                            <input type="submit" value="EnTrar">
+                            <p>Não tem uma conta?<a href="#">Registre-se</a></p>
+                        </div>
+                    </form>
+            </section>
+    </section>
+    <section class="background_image">
+    <script>
+      document.querySelector('.icon_eye').addEventListener('click', function(e){
+        let input = document.querySelector('#password')
+        let input_type = input.type
+        let input_value = input.value
+        if(input_type == 'password'){
+            document.querySelector('#password').type = 'text'
+            document.querySelector('#password').value = input_value
+        }else{
+            document.querySelector('#password').type = 'password'
+            document.querySelector('#password').value = input_value
+        }
+    })
+    </script>
+    </section>
+</body>
