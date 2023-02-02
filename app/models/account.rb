@@ -28,7 +28,7 @@ class Account < ApplicationRecord
     account_dest = user_dest.account
 
     update(balance: balance - quantity_with_tax)
-    byebug
+
     account_dest.update(balance: account_dest.balance + quantity)
     create_event('transference', "transference in the value: #{quantity} to #{user_dest.email}")
   end

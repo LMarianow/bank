@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  # before_action :authorize, except: [:new, :create]
   before_action :set_user, only: %i[ show edit update destroy deposit withdraw transference balance extract]
 
   # GET /users or /users.json
