@@ -210,12 +210,18 @@ RSpec.describe "/users", type: :request do
     context 'balance suficient' do
       before do
         account.update(balance: 200)
-        post transference_user_path(user), params: params, as: :json
+        Timecop.freeze(DateTime.new(2023, 7, 15, 0)) do
+          post transference_user_path(user), params: params, as: :json
+        end
+      end
+
+      after do
+        Timecop.return
       end
 
       it "renders a successful response", :aggregate_failures do
         expect{ account.reload }
-          .to change(account, :balance).from(200).to(150)
+          .to change(account, :balance).from(200).to(143)
         expect{ account2.reload }
           .to change(account2, :balance).from(0).to(50)
 
