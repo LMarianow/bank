@@ -1,0 +1,20 @@
+<h1>Session</h1>
+
+<%= form_with(local: true) do |form| %>
+
+  <div class="field">
+    <%= form.label :email %>
+    <%= form.text_field :email %>
+  </div>
+
+  <div class="field">
+    <%= form.label :password_digest %>
+    <%= form.text_field :password_digest %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
+
+<%= link_to 'Back', users_path %>

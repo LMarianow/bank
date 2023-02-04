@@ -82,7 +82,8 @@ class UsersController < ApplicationController
   end
 
   def balance
-    @user.account.balance
+    @balance = @user.account.balance
+    head :ok
   end
 
   def extract

@@ -12,14 +12,14 @@ class Account < ApplicationRecord
   end
 
   def withdraw(quantity)
-    return if verify_balance(quantity, 'withdraw')
+    return if verify_balance(quantity.to_f, 'withdraw')
 
     update(balance: balance - quantity.to_f)
     create_event('withdraw', "withdraw in the value: #{quantity}")
   end
 
   def transference(quantity, email)
-    quantity_with_tax = tax_por_hour(quantity)
+    quantity_with_tax = tax_por_hour(quantity.to_f)
 
     return if verify_balance(quantity_with_tax, 'transference')
 
