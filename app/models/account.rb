@@ -6,6 +6,8 @@ class Account < ApplicationRecord
 
   has_many :events
 
+  before_destroy :avoid_destroy
+
   def deposit(quantity)
     update(balance: balance + quantity.to_f)
     create_event('deposit', "deposit in the value: #{quantity}")
@@ -57,5 +59,9 @@ class Account < ApplicationRecord
         description: description,
         account: self
     )
+  end
+
+  def avoid_destroy
+    raise StandardError, "it doesnt destroy account"
   end
 end

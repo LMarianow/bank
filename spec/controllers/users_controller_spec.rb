@@ -101,21 +101,23 @@ RSpec.describe UsersController, type: :controller do
   end
 
   describe "DELETE /destroy" do
-    it "destroys the requested user" do
-      user = User.create! valid_attributes
-      expect {
-        delete user_url(user)
-      }.to change(User, :count).by(-1)
+    let!(:account) { create(:account) }
+    let!(:user) { account.user }
+    let(:do_request) do
+      delete :destroy, params: { id: user.id  }, as: :json
     end
 
-    it "redirects to the users list" do
-      user = User.create! valid_attributes
-      delete user_url(user)
-      expect(response).to redirect_to(users_url)
+    it "must not allowed to destroy account" do
+      login(user)
+
+      expect {
+        do_request
+      }.to raise_error(StandardError)
+       .and change(User, :count).by(0)
+       .and change(Account, :count).by(0)
     end
   end
 
-##############
   describe "post /deposit" do
     let!(:account) { create(:account) }
     let!(:user) { account.user }
@@ -308,14 +310,12 @@ RSpec.describe UsersController, type: :controller do
         end
     end
 
-    before do
-      events.last.update(created_at: DateTime.new(2023,1,25))
-
-      do_request
-    end
-
     it "renders a successful response", :aggregate_failures do
-      expect(response).to have_http_status(:ok)
+      login(user)
+      events.last.update(created_at: DateTime.new(2023,1,25))
+      do_request
+
+      expect(response).to have_http_status(:no_content)
     end
   end
 end

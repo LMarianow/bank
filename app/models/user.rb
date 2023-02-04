@@ -7,7 +7,7 @@ class User < ApplicationRecord
 
   has_secure_password
 
-  has_one :account, inverse_of: :user
+  has_one :account, inverse_of: :user, dependent: :destroy
 
   validates :email, :name, :password_digest, :cpf, presence: true
 

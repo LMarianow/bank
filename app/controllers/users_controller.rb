@@ -62,10 +62,8 @@ class UsersController < ApplicationController
   def destroy
     @user.destroy
 
-    respond_to do |format|
-      format.html { redirect_to users_url, notice: "User was successfully destroyed." }
-      format.json { head :no_content }
-    end
+    flash[:alert] = 'No allowed destroy account'
+    head :no_content
   end
 
   def deposit
