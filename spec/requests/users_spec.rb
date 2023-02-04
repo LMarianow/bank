@@ -248,6 +248,8 @@ RSpec.describe "/users", type: :request do
     end
 
     before do
+      login(user)
+      session[:user_id] = nil
       account.update(balance: 200)
 
       get balance_user_path(user), params: params, as: :json
