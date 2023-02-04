@@ -16,62 +16,51 @@
             </nav>
         </header>
             <section class="background_form" style="height: 550px;">
-                    <form action="">
+            
+                <%=simple_form_for @user, url: users_path, method: :post, action: :create, remote: true do |f|%>
+                
+                    <form action='/users' method='post'>
                         <div class="form_title">
                             <%= image_tag("log-in.svg", :alt => "Icon Login", class: "icon") %>
                             <h1>Faça seu cadastro</h1>
                             <p>Entre com suas informações para o cadastro.</p>
                         </div>
                         <div class="area_input">
-                        <label for="email" class="label_title">Nome
+                        <label for="name" class="label_title">Nome
                             <div class="box_input">
-                                <input type="text" id="name" placeholder="Digite seu nome completo" style="margin-left: 1em;">
+
+                                <%= f.input :name, type: :text,label: false, placeholder: "Digite seu nome completo", required: false %>
+
                             </div>
                         </label>
                     </div>
                     <div class="area_input">
-                    <label for="email" class="label_title">Cpf
+                    <label for="cpf" class="label_title">Cpf
                         <div class="box_input">
-                            <input type="text" id="cpf" placeholder="Digite seu Cpf" style="margin-left: 1em;">
+                            <%= f.input :cpf, type: :text, label: false, placeholder: "Digite seu cpf", required: false %>
                         </div>
                     </label>
                 </div>
                         <div class="area_input">
                             <label for="email" class="label_title">E-mail
                                 <div class="box_input">
-                                    <input type="email" id="email" placeholder="Digite seu e-mail" style="margin-left: 1em;">
+                                    <%= f.input :email, type: :email, label: false, placeholder: "Seu email aqui", required: true %>
                                 </div>
                             </label>
                         </div>
                         <div class="area_input">
                             <label class="label_title" for="password">Senha
                                 <div class="box_input">
+                                    <%= f.input :password_digest, type: :password, id:"password", label: false, placeholder: "Digite sua senha", required: false %>
 
-                                    <input type="password" id="password" placeholder="Digite sua senha" style="margin-left: 1em;">
-                                    <%= image_tag("eye.svg", :alt => "Display Password Icon", class: "icon icon_focus icon_eye") %>
                                 </div>
                             </label>
                         </div>
                         <div class="area_input area_input_submit">
-                            <input type="submit" value="Cadastrar">
+                            <%= f.button :submit, 'Enviar', class: "area_input area_input_submit" %>
                         </div>
                     </form>
+                    <% end %>
             </section>
-    </section>
-    <section class="background_image">
-    <script>
-      document.querySelector('.icon_eye').addEventListener('click', function(e){
-        let input = document.querySelector('#password')
-        let input_type = input.type
-        let input_value = input.value
-        if(input_type == 'password'){
-            document.querySelector('#password').type = 'text'
-            document.querySelector('#password').value = input_value
-        }else{
-            document.querySelector('#password').type = 'password'
-            document.querySelector('#password').value = input_value
-        }
-    })
-    </script>
     </section>
 </body>

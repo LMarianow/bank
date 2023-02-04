@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  protect_from_forgery
   before_action :set_user, only: %i[ show edit update destroy deposit withdraw transference balance extract]
 
   # GET /users or /users.json
@@ -95,6 +96,6 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:name, :email, :password, :cpf)
+      params.require(:user).permit(:name, :email, :password_digest, :cpf)
     end
 end
