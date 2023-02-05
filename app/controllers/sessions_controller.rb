@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
     if @user && @user.authenticate(params[:session][:password])
       sign_in(@user)
 
-      redirect_to user_path(@user), status: :ok
+      redirect_to user_path(@user)
     else
       flash[:danger] = 'Invalid email/password combination'
       head :unauthorized
