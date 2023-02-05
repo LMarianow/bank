@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(version: 2023_01_29_173034) do
 
   create_table "accounts", force: :cascade do |t|
     t.decimal "balance", null: false
+    t.string "status", default: "open", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_id"

@@ -1,23 +1,27 @@
 # frozen_string_literal: true
 
 class Account < ApplicationRecord
-  validates :balance, presence: true
-  belongs_to :user
+  enum status: {
+    open: 'open', closed: 'closed'
+  }
 
+  belongs_to :user
   has_many :events
+
+  validates :balance, :status, presence: true
 
   before_destroy :avoid_destroy
 
   def deposit(quantity)
     update(balance: balance + quantity.to_f)
-    create_event('deposit', "deposit in the value: #{quantity}")
+    Event.add_event('deposit', "deposit in the value: #{quantity}", self)
   end
 
   def withdraw(quantity)
     return if verify_balance(quantity.to_f, 'withdraw')
 
     update(balance: balance - quantity.to_f)
-    create_event('withdraw', "withdraw in the value: #{quantity}")
+    Event.add_event('withdraw', "withdraw in the value: #{quantity}", self)
   end
 
   def transference(quantity, email)
@@ -32,7 +36,12 @@ class Account < ApplicationRecord
     update(balance: balance - quantity_with_tax)
 
     account_dest.update(balance: account_dest.balance + quantity)
-    create_event('transference', "transference in the value: #{quantity} to #{user_dest.email}")
+    create_event(quantity, quantity_with_tax, account_dest)
+  end
+
+  def create_event(quantity, quantity_with_tax, account_dest)
+    Event.add_event('transference', "transference in the value(with tax): #{quantity_with_tax} to #{account_dest.user.email}", account_dest)
+    Event.add_event('transference', "transference received in the value: #{quantity} from #{user.email}", self)
   end
 
   private
@@ -51,14 +60,6 @@ class Account < ApplicationRecord
 
   def verify_balance(quantity, action)
     raise ArgumentError, "balance insuficient for the #{action}" if balance - quantity < 0
-  end
-
-  def create_event(action, description)
-    Event.create(
-        action: action,
-        description: description,
-        account: self
-    )
   end
 
   def avoid_destroy

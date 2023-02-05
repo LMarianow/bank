@@ -11,4 +11,11 @@ class Event < ApplicationRecord
     transference:  'transference'
   }
 
+  def self.add_event(action, description, account)
+    Event.create(
+      action: action,
+      description: description,
+      account: account
+  )
+  end
 end

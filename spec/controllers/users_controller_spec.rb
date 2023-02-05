@@ -143,6 +143,9 @@ RSpec.describe UsersController, type: :controller do
       login(user)
       do_request
 
+      expect{ account.reload }
+        .to change(account, :balance).from(0).to(50)
+      expect(Event.count).to eq(1)
       expect(response).to have_http_status(:no_content)
     end
   end
@@ -181,6 +184,7 @@ RSpec.describe UsersController, type: :controller do
         expect{ account.reload }
           .to change(account, :balance).from(200).to(150)
 
+        expect(Event.count).to eq(1)
         expect(response).to have_http_status(:no_content)
       end
     end
@@ -239,6 +243,7 @@ RSpec.describe UsersController, type: :controller do
         expect{ account2.reload }
           .to change(account2, :balance).from(0).to(50)
 
+        expect(Event.count).to eq(2)
         expect(response).to have_http_status(:no_content)
       end
     end

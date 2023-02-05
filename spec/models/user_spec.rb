@@ -11,15 +11,20 @@ RSpec.describe Account do
     it { is_expected.to validate_presence_of(:name) }
   end
 
-  # describe 'associations' do
-  #   it { is_expected.to has_one(:account).optional }
-  # end
+  describe 'associations' do
+    it { is_expected.to have_one(:account).optional }
+  end
 
   describe 'user create' do
-    before { 
-        # byebug
-        user.save }
+    before { user.save }
 
     it { is_expected.to be_persisted }
+  end
+
+  describe 'user create with account' do
+    it 'must to create an account too' do
+      expect{ user.save }.to change(Account, :count).by(1)
+        .and change(User, :count).by(1)
+    end
   end
 end

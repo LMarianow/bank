@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_one :account, inverse_of: :user, dependent: :destroy
 
   validates :email, :name, :password_digest, :cpf, presence: true
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   def save
     super
